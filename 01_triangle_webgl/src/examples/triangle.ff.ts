@@ -50,14 +50,14 @@ function setupState(gl: WebGL2RenderingContext, canvas: HTMLCanvasElement): void
 }
 
 
-// Genera los vértices en sentido antihorario (CCW) para usar con TRIANGLE_FAN
+// Genera los vertices en sentido antihorario (CCW) para usar con TRIANGLE_FAN
 function generarPoligono(radio: number, segmentos: number): Float32Array {
   const posiciones = [];
   
-  // Vértice 0: El centro exacto (X=0, Y=0, Z=0)
+  // vertice 0: El centro exacto (X=0, Y=0, Z=0)
   posiciones.push(0.0, 0.0, 0.0); 
   
-  // Generamos los vértices del borde dando una vuelta completa (2 * PI)
+  // Generamos los vertices del borde dando una vuelta
   for (let i = 0; i <= segmentos; i++) {
     const angulo = (i / segmentos) * Math.PI * 2.0;
     posiciones.push(radio * Math.cos(angulo), radio * Math.sin(angulo), 0.0);
@@ -71,9 +71,9 @@ export function run(canvas: HTMLCanvasElement): void {
   ff.disable(LIGHTING);
   setupState(gl, canvas);
 
-  // --- PREPARACIÓN DE LAS GEOMETRÍAS Y VAOS ---
+  // geometria 
   
-  // 1. Triángulo (3 vértices)
+  //triángulo (3 vértices)
   const geoTriangulo = new Float32Array([
      0.0,  0.5, 0.0, 
     -0.5, -0.5, 0.0, 
@@ -81,7 +81,7 @@ export function run(canvas: HTMLCanvasElement): void {
   ]);
   const vaoTriangulo = createVAO(gl, createVertexBuffer(gl, geoTriangulo));
 
-  // 2. Cuadrado (4 vértices + 6 índices)
+  //cuadrado (4 vértices + 6 índices)
   const geoCuadrado = new Float32Array([
     -0.5,  0.5, 0.0, 
     -0.5, -0.5, 0.0, 
@@ -91,15 +91,15 @@ export function run(canvas: HTMLCanvasElement): void {
   const indicesCuadrado = new Uint16Array([0, 1, 2, 2, 1, 3]);
   const vaoCuadrado = createIndexedVAO(gl, createVertexBuffer(gl, geoCuadrado), createIndexBuffer(gl, indicesCuadrado));
 
-  // 3. Hexágono (6 segmentos -> 8 vértices en Abanico)
+  //hexagono (6 segmentos -> 8 vértices en Abanico)
   const geoHexagono = generarPoligono(0.5, 6);
   const vaoHexagono = createVAO(gl, createVertexBuffer(gl, geoHexagono));
 
-  // 4. Círculo (64 segmentos -> 66 vértices en Abanico)
+  //circulo (64 segmentos -> 66 vértices en Abanico)
   const geoCirculo = generarPoligono(0.5, 64);
   const vaoCirculo = createVAO(gl, createVertexBuffer(gl, geoCirculo));
 
-  // --- VARIABLES DE ESTADO Y ETIQUETAS ---
+  // estado
   let indiceForma = 0; 
   let indiceColor = 0; 
 
@@ -115,14 +115,14 @@ export function run(canvas: HTMLCanvasElement): void {
   const btnShape = document.getElementById('btnShape') as HTMLButtonElement;
   const btnColor = document.getElementById('btnColor') as HTMLButtonElement;
 
-  // --- LA FUNCIÓN DE DIBUJO ---
+  // dibujo 
   function drawEscena() {
     gl.clear(gl.COLOR_BUFFER_BIT);
     
-    // Asignamos el color
+    // color
     ff.setColor(coloresRGB[indiceColor]);
 
-    // Dibujamos según el VAO seleccionado
+    // seleccion del dibujo 
     if (indiceForma === 0) {
       gl.bindVertexArray(vaoTriangulo);
       ff.drawArrays(gl.TRIANGLES, 0, 3);
@@ -143,19 +143,19 @@ export function run(canvas: HTMLCanvasElement): void {
     }
   }
 
-  // --- EVENTOS DE LOS BOTONES ---
+  //botones pagina 
   btnShape.addEventListener('click', () => {
-    indiceForma = (indiceForma + 1) % 4; // Módulo 4 para rotar entre las 4 figuras
+    indiceForma = (indiceForma + 1) % 4; 
     btnShape.innerText = `Shape: ${nombresFormas[indiceForma]}`;
     drawEscena();
   });
 
   btnColor.addEventListener('click', () => {
-    indiceColor = (indiceColor + 1) % 3; // Módulo 3 para rotar entre los 3 colores
+    indiceColor = (indiceColor + 1) % 3; 
     btnColor.innerText = `Color: ${nombresColores[indiceColor]}`;
     drawEscena();
   });
 
-  // Render inicial para que la página no arranque vacía
+  // Render inicial
   drawEscena();
 }
