@@ -5,7 +5,6 @@ Equipo: JS masters
 Estudiantes:
 
   Daniela Villalobos
-  
   Enrique Thiers
 
 Instrucciones para correr el proyecto:
@@ -17,3 +16,5 @@ Instrucciones para correr el proyecto:
   
   Iniciar el servidor de desarrollo:
     npm run dev
+
+  Abrir en el navegador con la dirección que aparece en el terminal (normalmente http://localhost:5173)
