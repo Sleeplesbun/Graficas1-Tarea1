@@ -95,10 +95,11 @@ export function run(canvas: HTMLCanvasElement): void {
   const geoHexagono = generarPoligono(0.5, 6);
   const vaoHexagono = createVAO(gl, createVertexBuffer(gl, geoHexagono));
 
+  const SEGMENTS = 64;
   //circulo (64 segmentos -> 66 vértices en Abanico)
-  const geoCirculo = generarPoligono(0.5, 64);
+  const geoCirculo = generarPoligono(0.5, SEGMENTS);
   const vaoCirculo = createVAO(gl, createVertexBuffer(gl, geoCirculo));
-
+const numVerticesCirculo = geoCirculo.length / 3;
   // estado
   let indiceForma = 0; 
   let indiceColor = 0; 
@@ -139,7 +140,7 @@ export function run(canvas: HTMLCanvasElement): void {
     else if (indiceForma === 3) {
       gl.bindVertexArray(vaoCirculo);
       // 66 vértices totales para el círculo
-      ff.drawArrays(gl.TRIANGLE_FAN, 0, 66); 
+      ff.drawArrays(gl.TRIANGLE_FAN, 0, numVerticesCirculo); 
     }
   }
 
